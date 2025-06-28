@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time Route Analysis - Transit Insights</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0A1128;
+      color: white;
+    }
+
+    nav {
+      background: rgba(10, 17, 40, 0.95);
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #FF6B35;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav ul li a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: #00BFA6;
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      color: #00BFA6;
+    }
+
+
+    .hero-header {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    .hero-header::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(0,191,166,0.1), transparent 50%);
+      transform: rotate(15deg);
+      z-index: 0;
+    }
+
+    .hero-header h1 {
+      font-size: 3.2rem;
+      color: #FFFFFF;
+      margin-bottom: 1.2rem;
+      text-shadow: 2px 2px 8px rgba(0,191,166, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-header p {
+      font-size: 1.25rem;
+      color: #CBD5E1;
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      padding: 3rem 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #FF6B35;
+      margin-bottom: 1.5rem;
+      font-size: 1.6rem;
+    }
+
+    select, button {
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+      margin-right: 1rem;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    select {
+      width: 45%;
+      background: #f0f0f0;
+      color: #0A1128;
+    }
+
+    button {
+      background-color: #00BFA6;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background-color: #019d88;
+    }
+
+    #results {
+      margin-top: 2rem;
+      background-color: #FFFFFF;
+      color: #0A1128;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    #map {
+      height: 520px;
+      border-radius: 12px;
+      margin-top: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    footer {
+      background-color: #0A1128;
+      text-align: center;
+      padding: 1.5rem;
+      color: #94A3B8;
+      font-size: 0.95rem;
+      margin-top: 4rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Transit Insights</div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/temporal">Temporal Graph</a></li>
+      <li><a href="/realtime" style="color: #00BFA6;">Real-Time</a></li>
+      <li><a href="/critical">Critical Nodes</a></li>
+      <li><a href="/forecast">Forecasts</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-header">
+    <h1>Real-Time Transit Insights</h1>
+    <p>Visualize optimal bus routes, monitor congestion, and plan smoother commutes with live traffic intelligence.</p>
+  </div>
+
+  <div class="container">
+    <h2>Select source and destination stops below to get live route suggestions with estimated delays.</h2>
+    
+    <select id="sourceSelect">
+      <option value="">Select source stop</option>
+    </select>
+
+    <select id="destinationSelect">
+      <option value="">Select destination stop</option>
+    </select>
+
+    <br>
+    <button id="checkRoute">Check Route</button>
+    <div id="map"></div>
+    <div id="results"></div>
+    <canvas id="congestionChart" style="max-width: 100%; margin-top: 2rem;"></canvas>
+  </div>
+  <div class="container" style="text-align:center;">
+    <h2>🚌 Metro–Feeder Gap Dashboard</h2>
+    <p>Click below to open the full feeder analysis dashboard in a new tab.</p>
+    <a href="http://localhost:8501" target="_blank">
+      <button style="padding: 0.8rem 1.5rem; font-size: 1rem; background-color: #00BFA6; border: none; border-radius: 8px; color: white; cursor: pointer;">
+        Open Feeder Analysis Dashboard
+      </button>
+    </a>
+  </div>
+
+  <footer>
+    © 2025 Transit Insights. Empowering smarter mobility 🚦🚌
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    window.map = L.map('map').setView([12.9716, 77.5946], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    let routeLayer;
+
+    // Load all stops into dropdowns
+    fetch("/api/stops")
+      .then(res => res.json())
+      .then(stops => {
+        const source = document.getElementById("sourceSelect");
+        const destination = document.getElementById("destinationSelect");
+        stops.forEach(stop => {
+          const opt1 = document.createElement("option");
+          opt1.value = opt1.textContent = stop;
+          source.appendChild(opt1);
+
+          const opt2 = document.createElement("option");
+          opt2.value = opt2.textContent = stop;
+          destination.appendChild(opt2);
+        });
+      });
+
+    document.getElementById("checkRoute").addEventListener("click", function () {
+      const source = document.getElementById("sourceSelect").value;
+      const destination = document.getElementById("destinationSelect").value;
+
+      if (!source || !destination) {
+        alert("Please select both source and destination.");
+        return;
+      }
+
+      fetch("/realtime-analysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source, destination })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (window.routeLayer) {
+          window.map.removeLayer(window.routeLayer);
+        }
+
+        if (data.length && data[0].coordinates) {
+          const latlngs = data[0].coordinates.map(coord => [coord[0], coord[1]]);
+
+          // 🚦 Choose line color based on avg_congestion
+          const lineColor = data[0].avg_congestion > 70 ? 'red' :
+                            data[0].avg_congestion > 40 ? 'orange' : 'green';
+
+          window.routeLayer = L.polyline(latlngs, { color: lineColor }).addTo(map);
+          map.fitBounds(window.routeLayer.getBounds());
+        }
+
+
+        const output = document.getElementById("results");
+
+        if (data.error) {
+          output.innerHTML = `<p style="color:red;">${data.error}</p>`;
+          return;
+        }
+
+        output.innerHTML = data.map((route, i) => 
+          `<div style="margin-bottom:1.2rem;">
+            <strong>Route ${i + 1}</strong><br>
+            ${route.route_name} | Trip ID: ${route.trip_id}<br>
+            Stops: ${route.stops} | Avg. Congestion: ${route.avg_congestion}%<br>
+            Estimated Delay: ${route.est_delay_min} min
+          </div>`
+        ).join("");
+
+        if (routeLayer) map.removeLayer(routeLayer);
+        if (data[0].stop_coords && data[0].stop_coords.length > 0) {
+          const coords = data[0].stop_coords.map(s => [s.lat, s.lon]);
+          routeLayer = L.polyline(coords, { color: 'orange' }).addTo(map);
+          map.fitBounds(routeLayer.getBounds());
+        } else {
+          alert("No route coordinates found.");
+        }
+        // Draw congestion trend line if available
+        if (data.length && data[0].congestion_values) {
+          const labels = data[0].congestion_values.map((_, i) => `Stop ${i + 1}`);
+          const ctx = document.getElementById('congestionChart').getContext('2d');
+
+          console.log("Chart instance:", window.congestionChart);
+          
+          // Destroy old chart if it exists
+          if (window.congestionChart && typeof window.congestionChart.destroy === 'function') {
+            window.congestionChart.destroy();
+          }
+
+          window.congestionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [{
+                label: 'Congestion (%)',
+                data: data[0].congestion_values,
+                borderColor: '#FF6B35',
+                backgroundColor: 'rgba(255, 107, 53, 0.2)',
+                tension: 0.4,
+                fill: true,
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100
+                }
+              }
+            }
+          });
+        }
+
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        alert("Error fetching routes. See console.");
+      });
+    });
+  </script>
+</body>
+</html>

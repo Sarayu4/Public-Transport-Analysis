@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transit Insights</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0A1128 0%, #1B263B 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    nav {
+      background: rgba(10, 17, 40, 0.95);
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #FF6B35;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav ul li a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: #00BFA6;
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      color: #00BFA6;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-size: cover;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      color: #FFFFFF;
+      margin-bottom: 1.2rem;
+      text-shadow: 2px 2px 6px #000;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: #CBD5E1;
+      max-width: 750px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero button {
+      padding: 0.9rem 2.2rem;
+      font-size: 1.05rem;
+      background: linear-gradient(135deg, #00BFA6, #00D5B5);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,191,166, 0.4);
+    }
+
+    .hero button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0,191,166, 0.7);
+    }
+
+    .features {
+      background-color: #F9FAFB;
+      color: #0A1128;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      padding: 4rem 2rem;
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      transition: transform 0.4s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -30%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,107,53,0.1), transparent);
+      z-index: 0;
+      transform: rotate(25deg);
+    }
+
+    .feature-card h3 {
+      color: #FF6B35;
+      margin-bottom: 0.7rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card p {
+      position: relative;
+      z-index: 1;
+      line-height: 1.5;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+
+    footer {
+      background-color: #0A1128;
+      text-align: center;
+      padding: 1.2rem;
+      color: #94A3B8;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      nav ul {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Transit Insights</div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/temporal">Temporal Graph</a></li>
+      <li><a href="/realtime">Real-Time Analysis</a></li>
+      <li><a href="/critical">Critical Nodes</a></li>
+      <li><a href="/forecast">Forecasts</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h1>Smarter Cities, Safer Commutes</h1>
+    <p>Explore Bengaluru’s public transport like never before with intelligent AI-powered visualizations and analytics. Our dashboard empowers urban planners and citizens to build sustainable mobility for the future.</p>
+    <a href="/temporal"><button>Explore Network Evolution</button></a>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>Multiplex Temporal Graph</h3>
+      <p>Visualize how routes and stops evolved over time using advanced temporal network mapping.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Real-Time Analysis</h3>
+      <p>Track live or simulated bus movement, crowd density, and optimize scheduling decisions.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Critical Connectivity</h3>
+      <p>Identify high-impact transit nodes that ensure resilience in the face of disruptions.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Future Planning</h3>
+      <p>Predict future flows and recommend infrastructure upgrades using AI forecasting models.</p>
+    </div>
+  </section>
+  <section style="background:#111936; color:white; padding:3rem 2rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:2rem;">
+    <div>
+      <h3 style="color:#00BFA6;">Contact Us</h3>
+      <p>Email: support@transitinsights.in</p>
+      <p>Phone: +91 98765 43210</p>
+      <p>Location: Bengaluru, India</p>
+    </div>
+    <div>
+      <h3 style="color:#00BFA6;">Quick Links</h3>
+      <ul style="list-style:none; padding-left:0; line-height:1.8;">
+        <li><a href="/temporal" style="color:#CBD5E1; text-decoration:none;">Network Evolution</a></li>
+        <li><a href="/realtime" style="color:#CBD5E1; text-decoration:none;">Live Analysis</a></li>
+        <li><a href="/forecast" style="color:#CBD5E1; text-decoration:none;">AI Forecasts</a></li>
+        <li><a href="/critical.html" style="color:#CBD5E1; text-decoration:none;">Critical Nodes</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:#00BFA6;">Follow Us</h3>
+      <p><a href="#" style="color:#CBD5E1; text-decoration:none;">Twitter</a></p>
+      <p><a href="#" style="color:#CBD5E1; text-decoration:none;">LinkedIn</a></p>
+      <p><a href="#" style="color:#CBD5E1; text-decoration:none;">GitHub</a></p>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Transit Insights. Built with love and data 💡🚌
+  </footer>
+
+</body>
+</html>

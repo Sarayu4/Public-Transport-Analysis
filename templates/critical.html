@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Critical Traffic Nodes – Transit Insights</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0A1128 0%, #1B263B 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    nav {
+      background: rgba(10, 17, 40, 0.95);
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #FF6B35;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav ul li a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: #00BFA6;
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      color: #00BFA6;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 191, 166, 0.1), transparent 60%);
+      transform: rotate(15deg);
+      z-index: 0;
+    }
+
+    header h1 {
+      font-size: 3.2rem;
+      color: #FFFFFF;
+      margin-bottom: 1.2rem;
+      text-shadow: 2px 2px 6px #000;
+      z-index: 1;
+      position: relative;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      color: #CBD5E1;
+      max-width: 750px;
+      margin-bottom: 2.5rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    header img {
+      max-width: 400px;
+      width: 60%;
+      margin: 2rem 0;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      z-index: 1;
+      position: relative;
+    }
+
+    .launch-btn {
+      background: #00BFA6;
+      color: white;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin-top: 1rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .launch-btn:hover {
+      background: #00a891;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Transit Insights</div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/temporal">Temporal Graph</a></li>
+      <li><a href="/realtime">Real-Time</a></li>
+      <li><a href="/critical" style="color: #00BFA6;">Critical Nodes</a></li>
+      <li><a href="/forecast">Forecasts</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>Critical Traffic Nodes</h1>
+    <p>Explore Bengaluru’s most congested traffic zones powered by real-time data, BMTC proximity influence, and heat-index metrics. Our dashboard helps you visualize where urban mobility breaks down — and why.</p>
+    <img src="static/traffic_hotspot.png" alt="Traffic Hotspot Dashboard Preview">
+    <a class="launch-btn" href="http://localhost:8502/" target="_blank">🚦 Launch Critical Nodes Dashboard</a>
+  </header>
+
+</body>
+</html>

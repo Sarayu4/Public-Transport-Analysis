@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Future Forecast - Transit Insights</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0A1128;
+      color: white;
+    }
+
+    nav {
+      background: rgba(10, 17, 40, 0.95);
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #FF6B35;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav ul li a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: #00BFA6;
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover {
+      color: #00BFA6;
+    }
+
+
+    .hero-header {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-header::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 191, 166, 0.1), transparent 50%);
+      transform: rotate(15deg);
+      z-index: 0;
+    }
+
+    .hero-header h1 {
+      font-size: 3rem;
+      color: #FFFFFF;
+      margin-bottom: 1.2rem;
+      text-shadow: 2px 2px 8px rgba(0, 191, 166, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-header p {
+      font-size: 1.25rem;
+      color: #CBD5E1;
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      padding: 3rem 2rem 5rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #FF6B35;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #CBD5E1;
+      margin-bottom: 1.5rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 85vh;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    footer {
+      background-color: #0A1128;
+      text-align: center;
+      padding: 1.5rem;
+      color: #94A3B8;
+      font-size: 0.95rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Transit Insights</div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/temporal">Temporal Graph</a></li>
+      <li><a href="/realtime">Real-Time Analysis</a></li>
+      <li><a href="/critical">Critical Nodes</a></li>
+      <li><a href="/forecast" style="color: #00BFA6;">Forecasts</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-header">
+    <h1>Future Metro Expansion Forecast</h1>
+    <p> Visualizing proposed and planned metro station developments across Bengaluru to shape tomorrow’s transit landscape.</p>
+  </div>
+
+  <div class="container">
+    
+    <iframe src="{{ url_for('static', filename='forecast/predicted_map.html') }}"></iframe>
+  </div>
+
+  <footer>
+    © 2025 Transit Insights. Anticipating tomorrow’s transit needs 🚍📈
+  </footer>
+
+</body>
+</html>

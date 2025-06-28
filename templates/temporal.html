@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiplex Temporal Graph – Transit Insights</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0A1128 0%, #1B263B 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    nav {
+      background: rgba(10, 17, 40, 0.95);
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #FF6B35;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+      nav ul li a::after {
+        content: "";
+        display: block;
+        height: 2px;
+        background: #00BFA6;
+        width: 0;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+      }
+
+      nav ul li a:hover::after {
+        width: 100%;
+      }
+
+      nav ul li a:hover {
+        color: #00BFA6;
+      }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 191, 166, 0.1), transparent 60%);
+      transform: rotate(15deg);
+      z-index: 0;
+    }
+
+    header h1 {
+      font-size: 3.2rem;
+      color: #FFFFFF;
+      margin-bottom: 1.2rem;
+      text-shadow: 2px 2px 6px #000;
+      z-index: 1;
+      position: relative;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      color: #CBD5E1;
+      max-width: 750px;
+      margin-bottom: 2.5rem;
+      z-index: 1;
+      position: relative;
+    }
+
+
+
+    #slider-container {
+      background: #FFFFFF;
+      color: #0A1128;
+      padding: 1rem 1.5rem;
+      margin: 1rem auto;
+      max-width: 800px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-size: 0.95rem;
+    }
+
+    #slider-container label {
+      font-weight: bold;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #slider-container input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      background: #CBD5E1;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    #slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #00BFA6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+    }
+
+    .legend::-webkit-scrollbar {
+      display: none;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+
+    .legend-item:hover {
+      transform: translateY(-4px);
+    }
+
+    .color-dot {
+      height: 12px;
+      width: 12px;
+    }
+
+    .red { background-color: red; }
+    .blue { background-color: blue; }
+    .yellow { background-color: yellow; }
+
+    #map {
+      height: 80vh;
+      margin-top: 2rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Transit Insights</div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/temporal" style="color: #00BFA6;">Temporal Graph</a></li>
+      <li><a href="/realtime">Real-Time</a></li>
+      <li><a href="/critical">Critical Nodes</a></li>
+      <li><a href="/forecast">Forecasts</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>Multiplex Temporal Graph</h1>
+    <p>Explore the evolution of Bengaluru’s public transport network over the years. This temporal map reveals how bus stops, metro stations, and upcoming infrastructure expanded to meet the city's growing mobility needs.</p>
+  </header>
+
+  <div id="slider-container">
+    <label for="year-slider">Year: <span id="year-label">2014</span></label>
+    <input id="year-slider" type="range" min="2014" max="2025" step="1" value="2014" />
+
+    <div class="legend">
+      <div class="legend-item">
+        <span class="color-dot red"></span> Bus Stops
+        <input type="checkbox" id="redcheck" checked />
+      </div>
+      <div class="legend-item">
+        <span class="color-dot blue"></span> Metro Stations
+        <input type="checkbox" id="bluecheck" checked />
+      </div>
+      <div class="legend-item">
+        <span class="color-dot yellow"></span> Metro Under Construction
+        <input type="checkbox" id="yellowcheck" checked />
+      </div>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([12.97, 77.59], 11);
+    let currentLayer = null;
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const redcheck = document.getElementById("redcheck");
+    const bluecheck = document.getElementById("bluecheck");
+    const yellowcheck = document.getElementById("yellowcheck");
+
+    function loadYear(year) {
+      const url = `static/data/data_${year}.geojson`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (currentLayer) {
+            map.removeLayer(currentLayer);
+          }
+
+          currentLayer = L.geoJson(data, {
+            pointToLayer: (feature, latlng) => {
+              if ((feature.properties.network === "Namma Metro" || feature.properties.station === "subway") && feature.properties.construction !== "station" && bluecheck.checked)
+                return L.circleMarker(latlng, { radius: 4, color: 'blue', fillOpacity: 0.8 });
+              else if (feature.properties.construction === "station" && yellowcheck.checked)
+                return L.circleMarker(latlng, { radius: 4, color: 'yellow', fillOpacity: 0.8 });
+              else if (feature.properties.highway === "bus_stop" && redcheck.checked)
+                return L.circleMarker(latlng, { radius: 4, color: 'red', fillOpacity: 0.8 });
+            }
+          }).addTo(map);
+        })
+        .catch(err => console.error('GeoJSON load error:', err));
+    }
+
+    const slider = document.getElementById('year-slider');
+    const label = document.getElementById('year-label');
+    slider.addEventListener('input', () => {
+      const year = slider.value;
+      label.textContent = year;
+      loadYear(year);
+    });
+
+    loadYear(slider.value);
+  </script>
+</body>
+</html>
